@@ -1,0 +1,6 @@
+@Scaffolding.Services.Auth_HostAddress = http://localhost:5130
+
+GET {{Scaffolding.Services.Auth_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
