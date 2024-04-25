@@ -22,5 +22,9 @@ namespace Scaffolding.Core.Interfaces
 
         // Delete
         public void DeleteUser(int id);
+
+        // GetByUsernameAsync
+
+        public Task<User> GetByEmailAsync(string email);
     }
 }
