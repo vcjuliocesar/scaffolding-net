@@ -19,11 +19,11 @@ namespace Scaffolding.Services.Auth.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] CreateUserDTO model)
+        public async Task<IActionResult> Register([FromBody] CreateUserDTO dto)
         {
             try
             {
-                var user = await _authService.RegisterAsync(model);
+                var user = await _authService.RegisterAsync(dto);
                 return Ok(user);
             }
             catch (Exception ex)

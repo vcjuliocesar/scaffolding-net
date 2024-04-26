@@ -11,7 +11,7 @@ namespace Scaffolding.Core.Interfaces
     public interface IUserRepository
     {
         // Create
-        public User CreateUser(CreateUserDTO userDto);
+        public void CreateUser(CreateUserDTO userDto);
 
         // Read
         public User GetUserById(int id);
