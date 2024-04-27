@@ -31,9 +31,22 @@ namespace Scaffolding.Core.Services
             return GenerateToken(user);
         }
 
-        Task<User> IAuthService.RegisterAsync(CreateUserDTO user)
+        async Task<User> IAuthService.RegisterAsync(CreateUserDTO user)
         {
-            throw new NotImplementedException();
+            var existingUser = await _userRepository.GetByEmailAsync(user.Email);
+
+            if(existingUser != null) 
+            {
+                throw new Exception("El usuario ya existe.");
+            }
+
+            _userRepository.CreateUser(user);
+            
+            return new User
+            {
+                Name = user.Name,
+                Email = user.Email,
+            };
         }
 
         private string GenerateToken(User user)
