@@ -16,16 +16,17 @@ internal class Program
         var configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
             .Build();
-        
+
+        var connectionString = configuration.GetConnectionString("SqliteConnection");
+
         // Add services to the container.
-        builder.Services.AddScoped<IDatabaseConnection, OracleDatabaseConnection>(provider =>
-        {
-            var connectionString = configuration.GetConnectionString("OracleConnection");
-            return new OracleDatabaseConnection(connectionString);
+        builder.Services.AddScoped<IDatabaseConnection, SqliteDatabaseConnection>(provider =>
+        {           
+            return new SqliteDatabaseConnection(connectionString);
         });
 
-        builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IAuthService, AuthService>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
 
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
