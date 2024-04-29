@@ -84,15 +84,17 @@ namespace Scaffolding.Dbcontext.Dbcontext
 
         public void InitializeDatabase()
         {
+            //string directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Scaffolding.Dbcontext.Dbcontext");
+
             // Ruta del archivo de inicialización de la base de datos
-            string scriptPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DatabaseInitialization.sql");
+           // string sqlFile = Directory.GetFiles(directoryPath, "*.sql").FirstOrDefault();
 
             // Verificar si el archivo existe
-            if (File.Exists(scriptPath))
-            {
-                // Leer el script SQL desde el archivo
-                string script = File.ReadAllText(scriptPath);
-
+            //if (File.Exists(sqlFile))
+            //{
+            // Leer el script SQL desde el archivo
+            //string script = File.ReadAllText(sqlFile);
+            string script = "CREATE TABLE IF NOT EXISTS users (\r\n    Id INTEGER PRIMARY KEY,\r\n    Name TEXT NOT NULL,\r\n    Email TEXT NOT NULL,\r\n    Password TEXT NOT NULL,\r\n    CreatedAt DATETIME NOT NULL\r\n);\r\n";
                 try
                 {
                     // Ejecutar el script SQL para inicializar la base de datos
@@ -113,11 +115,11 @@ namespace Scaffolding.Dbcontext.Dbcontext
                     Console.WriteLine($"Error al inicializar la base de datos SQLite: {ex.Message}");
                     throw;
                 }
-            }
-            else
+            //}
+            /*else
             {
-                Console.WriteLine("El archivo de inicialización de la base de datos no existe.");
-            }
+                Console.WriteLine($"El archivo: {directoryPath} de inicialización de la base de datos no existe.");
+            }*/
         }
     }
 

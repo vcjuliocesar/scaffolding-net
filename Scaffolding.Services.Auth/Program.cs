@@ -35,6 +35,9 @@ internal class Program
 
         var app = builder.Build();
 
+        // Inicializar la base de datos
+        InitializeDatabase(connectionString);
+
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
@@ -49,5 +52,18 @@ internal class Program
         app.MapControllers();
 
         app.Run();
+    }
+
+    private static void InitializeDatabase(string connectionString)
+    {
+        try
+        {
+            var dbConnection = new SqliteDatabaseConnection(connectionString);
+            dbConnection.InitializeDatabase();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al inicializar la base de datos: {ex.Message}");
+        }
     }
 }
