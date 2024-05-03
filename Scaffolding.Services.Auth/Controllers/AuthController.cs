@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Scaffolding.Core.DTOs;
-using Scaffolding.Core.Interfaces;
-using Scaffolding.Core.Services;
+using Scaffolding.Services.Auth.DTOs;
+using Scaffolding.Services.Auth.Contracts;
 using System.Reflection;
 using System;
+using System.Text;
 
 namespace Scaffolding.Services.Auth.Controllers
 {
@@ -23,6 +23,19 @@ namespace Scaffolding.Services.Auth.Controllers
         {
             try
             {
+                if (dto == null)
+                {
+                    return BadRequest();
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                //dto.Password = EncryptPassword(dto.Password);
+
+
                 var user = await _authService.RegisterAsync(dto);
                 return Ok(user);
             }

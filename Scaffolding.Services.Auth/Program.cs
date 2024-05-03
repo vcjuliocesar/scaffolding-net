@@ -1,10 +1,10 @@
-using Scaffolding.Core.Interfaces;
-using Scaffolding.Core.Services;
-using Scaffolding.Core.Repositories;
-using Scaffolding.Dbcontext.Interfaces;
-using Scaffolding.Dbcontext.Dbcontext;
+using Scaffolding.Services.Auth.Contracts;
+using Scaffolding.Services.Auth.Services;
+using Scaffolding.Services.Auth.Repositories;
+using Scaffolding.Services.Auth.Dbcontext;
 using System.Configuration;
 using Microsoft.Extensions.Configuration;
+using Scaffolding.Services.Auth.Middlewares;
 
 internal class Program
 {
@@ -17,12 +17,12 @@ internal class Program
             .AddJsonFile("appsettings.json")
             .Build();
 
-        var connectionString = configuration.GetConnectionString("SqliteConnection");
-
+        var connectionString = configuration.GetConnectionString("MySqlConnection");
+        
         // Add services to the container.
-        builder.Services.AddScoped<IDatabaseConnection, SqliteDatabaseConnection>(provider =>
+        builder.Services.AddScoped<IDatabaseConnection, MySqlDatabaseConnection>(provider =>
         {           
-            return new SqliteDatabaseConnection(connectionString);
+            return new MySqlDatabaseConnection(connectionString);
         });
 
         builder.Services.AddScoped<IAuthService, AuthService>();
@@ -33,10 +33,13 @@ internal class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        // Agregar el middleware de encriptación y desencriptación de contraseñas
+        //builder.Services.AddTransient<PasswordEncryptionMiddleware>();
+
         var app = builder.Build();
 
-        // Inicializar la base de datos
-        InitializeDatabase(connectionString);
+        // Middleware personalizado para encriptar y desencriptar contraseñas
+        //app.UseMiddleware<PasswordEncryptionMiddleware>();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -52,18 +55,5 @@ internal class Program
         app.MapControllers();
 
         app.Run();
-    }
-
-    private static void InitializeDatabase(string connectionString)
-    {
-        try
-        {
-            var dbConnection = new SqliteDatabaseConnection(connectionString);
-            dbConnection.InitializeDatabase();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error al inicializar la base de datos: {ex.Message}");
-        }
     }
 }
